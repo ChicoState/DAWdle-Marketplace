@@ -34,7 +34,7 @@ export default function Signin() {
       if (data.success === false) {
         dispath(signInFailure(data.message));
       }
-      setLoading(false);
+
       if (res.ok) {
         dispath(signInSuccess(data));
         navigate("/");
