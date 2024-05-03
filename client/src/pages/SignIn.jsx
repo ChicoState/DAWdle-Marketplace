@@ -1,11 +1,17 @@
-import { Button, Label, Spinner, TextInput } from "flowbite-react";
+import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from "../redux/user/userSlice";
 
 export default function Signin() {
   const [formData, setFormData] = useState({});
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [loading, setLoading] = useState(null);
+  const { loading, error: errorMessage } = useSelector((state) => state.user);
+  const dispath = useDispatch();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -15,11 +21,10 @@ export default function Signin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.username || !formData.password) {
-      return setErrorMessage("Please fill out all fields.");
+      return dispath(signInFailure("Please fill out all fields."));
     }
     try {
-      setLoading(true);
-      setErrorMessage(null);
+      dispath(signInStart());
       const res = await fetch("/api/auth/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -27,15 +32,15 @@ export default function Signin() {
       });
       const data = await res.json();
       if (data.success === false) {
-        return setErrorMessage(data.message);
+        dispath(signInFailure(data.message));
       }
       setLoading(false);
       if (res.ok) {
+        dispath(signInSuccess(data));
         navigate("/");
       }
     } catch (error) {
-      setErrorMessage(error.message);
-      setLoading(false);
+      dispath(signInFailure(error.message));
     }
   };
 
@@ -78,14 +83,14 @@ export default function Signin() {
               type="submit"
               disabled={loading}
             >
-              {
-                loading ? (
-                  <>
-                  <Spinner size='sm'/>
+              {loading ? (
+                <>
+                  <Spinner size="sm" />
                   <span className="pl-3">Loading...</span>
-                  </>
-                ) : 'Sign In'
-              }
+                </>
+              ) : (
+                "Sign In"
+              )}
             </Button>
           </form>
           <div className=" flex gap-2 text-sm mt-5">
@@ -94,6 +99,11 @@ export default function Signin() {
               Sign Up
             </Link>
           </div>
+          {errorMessage && (
+            <Alert className="mt-5" color="failure">
+              {errorMessage}
+            </Alert>
+          )}
         </div>
       </div>
     </div>
