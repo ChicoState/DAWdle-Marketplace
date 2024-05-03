@@ -17,12 +17,14 @@ export default function Header() {
         </span>
         Marketplace
       </Link>
-      <TextInput
-        type="text"
-        placeholder="Search..."
-        rightIcon={AiOutlineSearch}
-        className="hidden lg:inline"
-      />
+      <form>
+        <TextInput
+          type="text"
+          placeholder="Search..."
+          rightIcon={AiOutlineSearch}
+          className="hidden lg:inline"
+        />
+      </form>
       <Button className="w-12 h-10 lg:hidden" color="gray" pill>
         <AiOutlineSearch />
       </Button>
@@ -31,20 +33,24 @@ export default function Header() {
           <FaMoon />
         </Button>
         <Link to="/sign-in">
-          <Button className="bg-gradient-to-r from-green-400 to-slate-600" outline pill>
+          <Button
+            className="bg-gradient-to-r from-green-400 to-slate-600"
+            outline
+            pill
+          >
             Sign In
           </Button>
         </Link>
         <Navbar.Toggle />
       </div>
       <Navbar.Collapse>
-        <Navbar.Link active={path === "/"}  as={'div'} >
+        <Navbar.Link active={path === "/"} as={"div"}>
           <Link to="/">Home</Link>
         </Navbar.Link>
-        <Navbar.Link active={path === "/about"} as={'div'} >
+        <Navbar.Link active={path === "/about"} as={"div"}>
           <Link to="/about">About</Link>
         </Navbar.Link>
-        <Navbar.Link active={path === "/projects"}  as={'div'}>
+        <Navbar.Link active={path === "/projects"} as={"div"}>
           <Link to="/projects">Projects</Link>
         </Navbar.Link>
       </Navbar.Collapse>
