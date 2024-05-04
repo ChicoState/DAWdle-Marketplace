@@ -1,18 +1,19 @@
-import React from "react";
-import { Button, Navbar, TextInput } from "flowbite-react";
-import { Link, useLocation } from "react-router-dom";
-import { AiOutlineSearch } from "react-icons/ai";
-import { FaMoon } from "react-icons/fa";
+import { Avatar, Button, Dropdown, Navbar, TextInput } from 'flowbite-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { AiOutlineSearch } from 'react-icons/ai';
+import { FaMoon } from 'react-icons/fa';
+import { useSelector, useDispatch } from 'react-redux';
 
 export default function Header() {
   const path = useLocation().pathname;
+  const { currentUser } = useSelector((state) => state.user);
   return (
     <Navbar className="boarder-b-2">
       <Link
         to="/"
         className="self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white"
       >
-        <span className="px-2 py-1 bg-gradient-to-r from-slate-600 to-green-400 rounded-lg text-white">
+        <span className="px-2 py-1 bg-gradient-to-r from-slate-700 to-green-400 rounded-lg text-white">
           DAWdle
         </span>
         Marketplace
@@ -32,15 +33,33 @@ export default function Header() {
         <Button className="w-12 h-10 hidden sm:inline" color="gray" pill>
           <FaMoon />
         </Button>
-        <Link to="/sign-in">
-          <Button
-            className="bg-gradient-to-r from-green-400 to-slate-600"
-            outline
-            pill
+        {currentUser ? (
+          <Dropdown
+            arrowIcon={false}
+            inline
+            label={
+              <Avatar alt='user' img={currentUser.profilePicture} rounded />
+            }
           >
-            Sign In
-          </Button>
-        </Link>
+            <Dropdown.Header>
+              <span className='block text-sm'>@{currentUser.currentname}</span>
+              <span className='block text-sm font-medium truncate'>
+                {currentUser.email}
+              </span>
+            </Dropdown.Header>
+            <Link to={'/dashboard?tab=profile'}>
+              <Dropdown.Item>Profile</Dropdown.Item>
+            </Link>
+            <Dropdown.Divider />
+            <Dropdown.Item>Sign out</Dropdown.Item>
+          </Dropdown>
+        ) : (
+          <Link to='/sign-in'>
+            <Button gradientDuoTone='purpleToBlue' outline>
+              Sign In
+            </Button>
+          </Link>
+        )}
         <Navbar.Toggle />
       </div>
       <Navbar.Collapse>
