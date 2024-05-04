@@ -1,46 +1,45 @@
-import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   signInStart,
   signInSuccess,
   signInFailure,
-} from "../redux/user/userSlice";
+} from '../redux/user/userSlice';
+import OAuth from '../components/OAuth';
 
 export default function Signin() {
   const [formData, setFormData] = useState({});
   const { loading, error: errorMessage } = useSelector((state) => state.user);
-  const dispath = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.username || !formData.password) {
-      return dispath(signInFailure("Please fill out all fields."));
+    if (!formData.email || !formData.password) {
+      dispatch(signInFailure('Please fill all the fields'));
     }
     try {
-      dispath(signInStart());
-      const res = await fetch("/api/auth/signin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      dispatch(signInStart());
+      const res = await fetch('/api/auth/signin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
       const data = await res.json();
       if (data.success === false) {
-        dispath(signInFailure(data.message));
+        dispatch(signInFailure(data.message));
       }
 
       if (res.ok) {
-        dispath(signInSuccess(data));
-        navigate("/");
+        dispatch(signInSuccess(data));
+        navigate('/');
       }
     } catch (error) {
-      dispath(signInFailure(error.message));
+      dispatch(signInFailure(error.message));
     }
   };
 
@@ -50,7 +49,7 @@ export default function Signin() {
         {/* left */}
         <div className="flex-1">
           <Link to="/" className="font-bold dark:text-white text-4xl">
-            <span className="px-2 py-1 bg-gradient-to-r from-slate-600 to-green-400 rounded-lg text-white">
+            <span className="px-2 py-1 bg-gradient-to-r from-slate-700 to-green-400 rounded-lg text-white">
               DAWdle
             </span>
             Marketplace
@@ -61,11 +60,11 @@ export default function Signin() {
         <div className="flex-1">
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <div>
-              <Label value="Your username" />
+              <Label value="Your Email" />
               <TextInput
-                type="text"
-                placeholder="Username"
-                id="username"
+                type="email"
+                placeholder="example@gmail.com"
+                id="email"
                 onChange={handleChange}
               />
             </div>
@@ -78,8 +77,9 @@ export default function Signin() {
                 onChange={handleChange}
               />
             </div>
+            <OAuth/>
             <Button
-              className="px-2 py-1 bg-gradient-to-b from-slate-600 to-green-400 rounded-lg"
+              className="px-2 py-1 bg-gradient-to-b from-slate-700 to-green-400 rounded-lg"
               type="submit"
               disabled={loading}
             >
