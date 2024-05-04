@@ -22,6 +22,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "https://cdn.iconscout.com/icon/free/png-256/free-user-1895567-1604557.png",
     },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
