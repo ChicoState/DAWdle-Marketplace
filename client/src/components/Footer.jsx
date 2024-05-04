@@ -9,7 +9,7 @@ import {
 } from "react-icons/bs";
 export default function FooterCom() {
   return (
-    <Footer container className="border border-t-8 border-teal-500">
+    <Footer container className="border border-t-8 border-green-400">
       <div className="w-full max-w-7xl mx-auto">
         <div className="grid w-full justify-between sm:flex md: grid-cols-1">
           <div className="mt-5">
@@ -17,7 +17,7 @@ export default function FooterCom() {
               to="/"
               className="self-center whitespace-nowrap text-lg sm:text-xl font-semibold dark:text-white"
             >
-              <span className="px-2 py-1 bg-gradient-to-r from-slate-600 to-green-400 rounded-lg text-white">
+              <span className="px-2 py-1 bg-gradient-to-r from-slate-700 to-green-400 rounded-lg text-white">
                 DAWdle
               </span>
               Marketplace
