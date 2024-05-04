@@ -225,7 +225,7 @@ export default function DashProfile() {
         />
         <Button
           type='submit'
-          gradientDuoTone='purpleToBlue'
+          className="bg-gradient-to-r from-slate-700 to-green-400 rounded-lg text-white"
           outline
           disabled={loading || imageFileUploading}
         >
