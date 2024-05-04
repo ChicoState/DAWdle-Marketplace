@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import ReactQuill, { Quill } from "react-quill";
+import { Alert, Button, FileInput, Select, TextInput } from "flowbite-react";
+import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import {
   getDownloadURL,
@@ -8,12 +8,12 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase";
+import { useState } from "react";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { useNavigate } from "react-router-dom";
 
 export default function CreatePost() {
-  const [value, setValue] = useState("");
   const [file, setFile] = useState(null);
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(null);
@@ -22,7 +22,7 @@ export default function CreatePost() {
 
   const navigate = useNavigate();
 
-  const handleUploadImage = async () => {
+  const handleUpdloadImage = async () => {
     try {
       if (!file) {
         setImageUploadError("Please select an image");
@@ -58,7 +58,6 @@ export default function CreatePost() {
       console.log(error);
     }
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -83,43 +82,12 @@ export default function CreatePost() {
       setPublishError("Something went wrong");
     }
   };
-
-  const modules = {
-    toolbar: [
-      [{ header: "1" }, { header: "2" }, { font: [] }],
-      [{ size: [] }],
-      ["bold", "italic", "underline", "strike", "blockquote"],
-      [{ color: [] }, { background: [] }],
-      [{ list: "ordered" }, { list: "bullet" }],
-      ["link", "image", "video"],
-      ["clean"],
-    ],
-  };
-
-  const formats = [
-    "header",
-    "font",
-    "size",
-    "bold",
-    "italic",
-    "underline",
-    "strike",
-    "blockquote",
-    "color",
-    "background",
-    "list",
-    "bullet",
-    "link",
-    "image",
-    "video",
-  ];
-
   return (
     <div className="p-3 max-w-3xl mx-auto min-h-screen">
       <h1 className="text-center text-3xl my-7 font-semibold">Create a post</h1>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-4 sm:flex-row justify-between">
-          <input
+          <TextInput
             type="text"
             placeholder="Title"
             required
@@ -129,7 +97,7 @@ export default function CreatePost() {
               setFormData({ ...formData, title: e.target.value })
             }
           />
-          <select
+          <Select
             onChange={(e) =>
               setFormData({ ...formData, category: e.target.value })
             }
@@ -138,17 +106,20 @@ export default function CreatePost() {
             <option value="javascript">JavaScript</option>
             <option value="reactjs">React.js</option>
             <option value="nextjs">Next.js</option>
-          </select>
+          </Select>
         </div>
         <div className="flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3">
-          <input
+          <FileInput
             type="file"
             accept="image/*"
             onChange={(e) => setFile(e.target.files[0])}
           />
-          <button
+          <Button
             type="button"
-            onClick={handleUploadImage}
+            gradientDuoTone="purpleToBlue"
+            size="sm"
+            outline
+            onClick={handleUpdloadImage}
             disabled={imageUploadProgress}
           >
             {imageUploadProgress ? (
@@ -161,9 +132,9 @@ export default function CreatePost() {
             ) : (
               "Upload Image"
             )}
-          </button>
+          </Button>
         </div>
-        {imageUploadError && <p className="text-red-500">{imageUploadError}</p>}
+        {imageUploadError && <Alert color="failure">{imageUploadError}</Alert>}
         {formData.image && (
           <img
             src={formData.image}
@@ -173,13 +144,21 @@ export default function CreatePost() {
         )}
         <ReactQuill
           theme="snow"
-          modules={modules}
-          formats={formats}
-          value={value}
-          onChange={(value) => setValue(value)}
+          placeholder="Write something..."
+          className="h-72 mb-12"
+          required
+          onChange={(value) => {
+            setFormData({ ...formData, content: value });
+          }}
         />
-        <button type="submit">Publish</button>
-        {publishError && <p className="text-red-500">{publishError}</p>}
+        <Button type="submit" gradientDuoTone="purpleToPink">
+          Publish
+        </Button>
+        {publishError && (
+          <Alert className="mt-5" color="failure">
+            {publishError}
+          </Alert>
+        )}
       </form>
     </div>
   );
