@@ -76,7 +76,7 @@ export default function CreatePost() {
 
       if (res.ok) {
         setPublishError(null);
-        navigate("/");
+        navigate(`/post/${data.slug}`);
       }
     } catch (error) {
       setPublishError("Something went wrong");
@@ -151,7 +151,10 @@ export default function CreatePost() {
             setFormData({ ...formData, content: value });
           }}
         />
-        <Button type="submit" gradientDuoTone="purpleToPink">
+        <Button
+          type="submit"
+          className="bg-gradient-to-r from-slate-700 to-green-400 rounded-lg text-white"
+        >
           Publish
         </Button>
         {publishError && (
