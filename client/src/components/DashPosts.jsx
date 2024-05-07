@@ -47,6 +47,28 @@ export default function DashPosts() {
     }
   };
 
+  const handleDeletePost = async () => {
+    setShowModal(false);
+    try {
+      const res = await fetch(
+        `/api/post/deletepost/${postIdToDelete}/${currentUser._id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        setUserPosts((prev) =>
+          prev.filter((post) => post._id !== postIdToDelete)
+        );
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <div className="table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
       {userPosts.length > 0 ? (
@@ -63,7 +85,7 @@ export default function DashPosts() {
               </Table.HeadCell>
             </Table.Head>
             {userPosts.map((post) => (
-              <Table.Body key={post._id} className="divide-y">
+              <Table.Body className="divide-y">
                 <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
                   <Table.Cell>
                     {new Date(post.updatedAt).toLocaleDateString()}
@@ -135,7 +157,9 @@ export default function DashPosts() {
               Are you sure you want to delete this post?
             </h3>
             <div className="flex justify-center gap-4">
-              <Button color="failure">Yes, I'm sure</Button>
+              <Button color="failure" onClick={handleDeletePost}>
+                Yes, I'm sure
+              </Button>
               <Button color="gray" onClick={() => setShowModal(false)}>
                 No, cancel
               </Button>
