@@ -212,7 +212,7 @@ export default function DashboardComp() {
             </Table.Head>
             {posts &&
               posts.map((post) => (
-                <Table.Body key={post._id} className="divide-y">
+                <Table.Body key={post._id} className="divide-y justify-center">
                   <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
                     <Table.Cell>
                       <img
