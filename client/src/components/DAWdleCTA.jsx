@@ -7,7 +7,7 @@ export default function DAWdleCTA() {
       <div className="flex-1 justify-center flex flex-col">
         <h2 className="text-2xl">Want to make audio?</h2>
         <p className="text-gray-500 my-2">
-          Checkout this resource if you are new to using DAWdle want to be able
+          Checkout this resource if you are new to using DAWdle and want to be able
           to run it.
         </p>
         <Button className="rounded-tl-xl rounded-bl-none bg-gradient-to-r from-slate-700 to-green-400">
